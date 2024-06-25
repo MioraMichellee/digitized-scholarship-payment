@@ -1,5 +1,10 @@
 
 package com.xadmin.etudiant.web;
+
+import com.xadmin.montant.bean.Montant;
+import com.xadmin.equipement.bean.Equipement;
+import com.xadmin.equipement.dao.EquipementDao;
+import com.xadmin.montant.dao.MontantDao;
 //
 //import jakarta.servlet.ServletConfig;
 //import jakarta.servlet.ServletException;
@@ -49,7 +54,10 @@ package com.xadmin.etudiant.web;
 //}
 
 import com.xadmin.etudiant.bean.Etudiant;
+
 import com.xadmin.etudiant.dao.EtudiantDao;
+import com.xadmin.montant.bean.Montant;
+
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
@@ -67,11 +75,15 @@ import java.util.List;
 @WebServlet("/")
 public class EtudiantSERVLET extends HttpServlet {
     private EtudiantDao etudiantDao;
+    private MontantDao montantDao;
+    private EquipementDao equipementDao;
 
 
     @Override
     public void init() throws ServletException{
         etudiantDao = new EtudiantDao();
+        montantDao = new MontantDao();
+        equipementDao = new EquipementDao();
     }
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //        super.doPost(req, resp);
@@ -94,34 +106,6 @@ public class EtudiantSERVLET extends HttpServlet {
         }
         
     }
-//    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        PrintWriter pr = resp.getWriter();
-//        pr.write("route ngamba ito");
-//
-//        String action = req.getServletPath();
-//        switch (action)
-//        {
-//            case "/new":
-//                showNewForm(req, resp);
-//                break;
-//            case "/insert":
-//                insertEtudiant(req,resp);
-//                break;
-//            case "/delete":
-//                deleteEtudiant(req,resp);
-//                break;
-//            case "/edit":
-//                showEditForm(req,resp);
-//                break;
-//            case "/update":
-//                updateEtudiant(req, resp);
-//                break;
-//
-//            default:
-//                listEtudiant(req, resp);
-//                break;
-//    }
-//    }
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getServletPath();
@@ -145,6 +129,35 @@ public class EtudiantSERVLET extends HttpServlet {
                 break;
             case "/list":
                 listEtudiant(req, resp);
+                break;
+                
+//                -------------------------------
+            case "/newMontant":
+                showNewFormMontant(req, resp);
+                break;
+            case "/insertMontant":
+                insertMontant(req,resp);
+                break;
+            case "/deleteM":
+            	System.out.println("HELLO");
+                deleteMontant(req,resp);
+                break;
+            case "/editMontant":
+                showEditFormMontant(req,resp);
+                break;
+            case "/updateMontant":
+                updateMontant(req, resp);
+                break;
+            case "/listMontant":
+                listMontant(req, resp);
+                break;
+                
+//                --------------------------------------
+            case "/editEquipement":
+                showEditFormEquipement(req, resp);
+                break;
+            case "/updateEquipement":
+                updateEquipement(req, resp);
                 break;
         }
     }
@@ -181,10 +194,11 @@ public class EtudiantSERVLET extends HttpServlet {
 
     //edit etudiant
     public void showEditForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-        int matricule = Integer.parseInt(req.getParameter("matricule"));
+        int matricule = Integer.parseInt(req.getParameter("id"));
         Etudiant existingEtudiant;
         try {
-            existingEtudiant = etudiantDao.selectEtudiant(matricule);
+        	existingEtudiant = etudiantDao.selectEtudiant(matricule);
+            System.out.println("Etudiant a modifier" + matricule);
             RequestDispatcher dispatcher = req.getRequestDispatcher("Etudiant-form.jsp");
             req.setAttribute("etudiant", existingEtudiant);
             dispatcher.forward(req, resp);
@@ -195,7 +209,9 @@ public class EtudiantSERVLET extends HttpServlet {
 
     // update
     public void updateEtudiant(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-        int matricule = Integer.parseInt(req.getParameter("matricule"));
+        int matricule = Integer.parseInt(req.getParameter("id"));
+        
+        
         String nom = req.getParameter("nom");
         String sexe = req.getParameter("sexe");
         String dateNais = req.getParameter("dateNais");
@@ -203,24 +219,15 @@ public class EtudiantSERVLET extends HttpServlet {
         String niveau = req.getParameter("niveau");
         String  mail = req.getParameter("mail");
         String  anneeUniv = req.getParameter("anneeUniv");
-
         Etudiant etudiant = new Etudiant(matricule,nom, sexe,dateNais,institution,niveau, mail, anneeUniv);
+        
+
+        System.out.println("TY LE ETUDIANT UPDATE"+ etudiant );
+        
         etudiantDao.updateEtudiant(etudiant);
         resp.sendRedirect("list");
     }
 
-    // default
-
-//    private void listEtudiant(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
-//        try{
-//            List<Etudiant> listEtudiant = etudiantDao.selectAllEtudiant();
-//            req.setAttribute("listEtudiant", listEtudiant);
-//            RequestDispatcher dispatcher = req.getRequestDispatcher("Etudiant-list.jsp");
-//            dispatcher.forward(req, resp);
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
-//    }
     private void listEtudiant(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             List<Etudiant> listEtudiant = etudiantDao.selectAllEtudiant();
@@ -232,4 +239,111 @@ public class EtudiantSERVLET extends HttpServlet {
             e.printStackTrace();
         }
     }
+    
+//    --------------------------------------------------------------------
+//    POUR TABLE MONTANT 
+    public void showNewFormMontant(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException{
+        RequestDispatcher dispatcher = req.getRequestDispatcher("Montant-form.jsp");
+        dispatcher.forward(req, res);
+    }
+
+    // insert montant method
+    public void insertMontant (HttpServletRequest req, HttpServletResponse resp ) throws ServletException, IOException{
+        String niveau = req.getParameter("niveau");
+        int montantValue = Integer.parseInt(req.getParameter("montant"));
+    
+        Montant newMontant = new Montant(niveau, montantValue);
+
+        montantDao.insertMontant(newMontant);
+        resp.sendRedirect("listMontant");
+    }
+
+    // delete montant
+   
+
+     private void deleteMontant(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    	    int idNiv = Integer.parseInt(req.getParameter("idNiv"));
+    	    System.out.println("Deleting montant with idNiv: " + idNiv); // Assurez-vous que ce log s'affiche
+
+    	    try {
+    	        montantDao.deleteMontant(idNiv);
+    	        System.out.println("Montant deleted successfully with idNiv: " + idNiv); // Assurez-vous que ce log s'affiche après la suppression
+    	    } catch (Exception e) {
+    	        e.printStackTrace();
+    	        System.err.println("Failed to delete montant with idNiv: " + idNiv);
+    	    }
+
+    	    resp.sendRedirect("listMontant");
+    	}
+
+
+    //edit 
+    public void showEditFormMontant(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+        int idNiv = Integer.parseInt(req.getParameter("idNiv"));
+        Montant existingMontant;
+        try {
+            existingMontant = montantDao.selectMontant(idNiv);
+            RequestDispatcher dispatcher = req.getRequestDispatcher("Montant-form.jsp");
+            req.setAttribute("montant", existingMontant);
+            dispatcher.forward(req, resp);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    // update
+    public void updateMontant(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+        int idNiv = Integer.parseInt(req.getParameter("idNiv"));
+        String niveau = req.getParameter("niveau");
+        int montantValue = Integer.parseInt(req.getParameter("montant"));
+       
+        Montant montant = new Montant(idNiv,niveau, montantValue);
+        System.out.println("TY LE montant UPDATE"+ montant );
+        montantDao.updateMontant(montant);
+        resp.sendRedirect("listMontant");
+    }
+
+
+    private void listMontant(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            List<Montant> listMontant = montantDao.selectAllMontant();
+            List<Equipement> listEquipement = equipementDao.selectAllEquipement();
+            System.out.println("Nombre montant: " + listMontant);  // Debugging log
+            System.out.println("Liste eq:"+ listEquipement);
+            req.setAttribute("listMontant", listMontant);
+            req.setAttribute("listEquipement", listEquipement);
+            RequestDispatcher dispatcher = req.getRequestDispatcher("Montant-list.jsp");
+            dispatcher.forward(req, resp);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+//    ---------------------------------------------------
+//    pour equipement
+    public void showEditFormEquipement(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+        int idEq = Integer.parseInt(req.getParameter("idEq"));
+        Equipement existingEquipement;
+        try {
+            existingEquipement = equipementDao.selectEquipement(idEq);
+            RequestDispatcher dispatcher = req.getRequestDispatcher("Equipement-form.jsp");
+            req.setAttribute("equipement", existingEquipement);
+            dispatcher.forward(req, resp);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    
+    public void updateEquipement(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+        int idEq = Integer.parseInt(req.getParameter("idEq"));
+//        String niveau = req.getParameter("niveau");
+        int montantEq = Integer.parseInt(req.getParameter("montantEq"));
+       
+        Equipement equipement = new Equipement(idEq, montantEq);
+        System.out.println("TY LE montant UPDATE"+ equipement );
+        equipementDao.updateEquipement(equipement);
+        resp.sendRedirect("listMontant");
+    }
 }
+
+

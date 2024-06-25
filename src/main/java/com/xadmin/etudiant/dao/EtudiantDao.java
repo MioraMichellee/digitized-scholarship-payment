@@ -91,8 +91,9 @@ public class EtudiantDao {
                 String institution = rs.getString("institution");
                 String niveau = rs.getString("niveau");
                 String mail = rs.getString("mail");
-                String anneUniv = rs.getString("anneUniv");
+                String anneUniv = rs.getString("anneeUniv");
                 etudiant = new Etudiant(matricule, name, sexe, dateNais, institution, niveau, mail, anneUniv);
+                System.out.println("selected etudiant"+ etudiant);
             }
         } catch (SQLException e) {
             printSQLException(e);
@@ -139,7 +140,7 @@ public class EtudiantDao {
             preparedStatement.setString(3, etudiant.getDateNais());
             preparedStatement.setString(4, etudiant.getInstitution());
             preparedStatement.setString(5, etudiant.getNiveau());
-            preparedStatement.setString(2, etudiant.getMail());
+            preparedStatement.setString(6, etudiant.getMail());
             preparedStatement.setString(7, etudiant.getAnneeUniv());
             preparedStatement.setInt(8, etudiant.getMatricule());
 

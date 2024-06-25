@@ -25,15 +25,19 @@
 			<div class="card-body">
 				<%
 					Etudiant etudiant = (Etudiant) request.getAttribute("etudiant");
+					
 					boolean isUpdate = etudiant != null;
 				%>
 				<form action="<%= isUpdate ? "update" : "insert" %>" method="post">
 					<h2>
 						<%= isUpdate ? "Modifier Etudiant" : "Ajouter Etudiant" %>
+						
 					</h2>
-					<% if (isUpdate) { %>
-						<input type="hidden" name="matricule" value="<%= etudiant.getMatricule() %>"/>
-					<% } %>
+				
+					 <% if (isUpdate) { %>
+                        <input type="hidden" name="id" value="<%= etudiant.getMatricule() %>"/>
+                    <% } %>
+					
 					<fieldset class="form-group">
 						<label>Nom</label>
 						<input type="text" name="nom" class="form-control" value="<%= isUpdate ? etudiant.getNom() : "" %>" required="required">

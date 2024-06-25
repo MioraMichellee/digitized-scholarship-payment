@@ -14,5 +14,14 @@
     <servlet-name>EtudiantServlet</servlet-name>
     <url-pattern>/EtudiantServlet</url-pattern>
   </servlet-mapping>
-  
+  <servlet>
+    <description></description>
+    <display-name>MontantSERVLET</display-name>
+    <servlet-name>MontantSERVLET</servlet-name>
+    <servlet-class>com.xadmin.montant.web.MontantSERVLET</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MontantSERVLET</servlet-name>
+    <url-pattern>/MontantSERVLET</url-pattern>
+  </servlet-mapping>
 </web-app>
