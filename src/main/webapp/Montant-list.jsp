@@ -76,7 +76,7 @@
 
 						<td><%= equipement.getMontantEq() %></td>
                 <td>
-                    <a href="${pageContext.request.contextPath}/editEquipement?idEq=<%= equipement.getIdEq() %>">Edit</a>
+                    <a href="${pageContext.request.contextPath}/editEquipement?idEq=<%= equipement.getIdEq() %>" class="btn btn-primary">Edit</a>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                 </td>
             </tr>
