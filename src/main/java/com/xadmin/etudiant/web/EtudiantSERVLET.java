@@ -5,6 +5,7 @@ import com.xadmin.montant.bean.Montant;
 import com.xadmin.equipement.bean.Equipement;
 import com.xadmin.equipement.dao.EquipementDao;
 import com.xadmin.montant.dao.MontantDao;
+import com.xadmin.payer.bean.Payer;
 //
 //import jakarta.servlet.ServletConfig;
 //import jakarta.servlet.ServletException;
@@ -52,7 +53,7 @@ import com.xadmin.montant.dao.MontantDao;
 //	}
 //
 //}
-
+import com.xadmin.payer.dao.PayerDao;
 import com.xadmin.etudiant.bean.Etudiant;
 
 import com.xadmin.etudiant.dao.EtudiantDao;
@@ -77,13 +78,14 @@ public class EtudiantSERVLET extends HttpServlet {
     private EtudiantDao etudiantDao;
     private MontantDao montantDao;
     private EquipementDao equipementDao;
-
+    private PayerDao payerDao;
 
     @Override
     public void init() throws ServletException{
         etudiantDao = new EtudiantDao();
         montantDao = new MontantDao();
         equipementDao = new EquipementDao();
+        payerDao = new PayerDao();
     }
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //        super.doPost(req, resp);
@@ -158,6 +160,29 @@ public class EtudiantSERVLET extends HttpServlet {
                 break;
             case "/updateEquipement":
                 updateEquipement(req, resp);
+                break;
+//                ---------------------------------------
+            case "/newPayer":
+                showNewFormPayer(req, resp);
+                break;
+            case "/insertPayer":
+                insertPayer(req,resp);
+                break;
+            case "/deletePayer":
+            	System.out.println("HELLO");
+                deletePayer(req,resp);
+                break;
+            case "/editPayer":
+                showEditFormPayer(req,resp);
+                break;
+            case "/updatePayer":
+            	System.out.println("ICI "); 
+                updatePayer(req, resp);
+                break;
+            case "/listPayer":
+            	   
+                listPayer(req, resp);
+                           
                 break;
         }
     }
@@ -344,6 +369,98 @@ public class EtudiantSERVLET extends HttpServlet {
         equipementDao.updateEquipement(equipement);
         resp.sendRedirect("listMontant");
     }
+    
+//    ----------------------------------------------
+//    pour payer 
+    public void showNewFormPayer(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException{
+        RequestDispatcher dispatcher = req.getRequestDispatcher("Payer-form.jsp");
+        dispatcher.forward(req, res);
+    }
+
+    // insert etudiant method
+    public void insertPayer (HttpServletRequest req, HttpServletResponse resp ) throws ServletException, IOException{
+        int matricule = Integer.parseInt(req.getParameter("matricule"));
+        String date = req.getParameter("date");
+        String  anneeUniv = req.getParameter("anneeUniv");
+        int nbMois = Integer.parseInt(req.getParameter("nbMois"));
+        
+        Payer newPayer = new Payer(matricule,anneeUniv,date,nbMois);
+
+        payerDao.insertPayer(newPayer);
+        resp.sendRedirect("listPayer");
+    }
+
+    // delete etudiant
+    private void deletePayer (HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+        int idPayer = Integer.parseInt(req.getParameter("idPayer"));
+        try{
+            payerDao.deletePayer(idPayer);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        resp.sendRedirect("listPayer");
+    }
+
+    //edit etudiant
+    public void showEditFormPayer(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+        int idPayer = Integer.parseInt(req.getParameter("idPayer"));
+        Payer existingPayer;
+        try {
+        	existingPayer = payerDao.selectPayer(idPayer);
+            System.out.println("Payement a modifier" + existingPayer.getIdPaye());
+            RequestDispatcher dispatcher = req.getRequestDispatcher("Payer-form.jsp");
+            req.setAttribute("payer", existingPayer);
+            dispatcher.forward(req, resp);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    // update
+    public void updatePayer(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+       
+    	
+//    	int idPayer = Integer.parseInt(req.getParameter("id"));
+    	String id = req.getParameter("id");
+    	int idPayer = Integer.parseInt(id);
+    	System.out.println("ity ny idString"+ idPayer);
+       
+        String matriculeS = req.getParameter("matricule");
+        int matricule = Integer.parseInt(matriculeS);
+        System.out.println("matricule modifie: "+matricule );
+        
+        String anneeUniv = req.getParameter("anneeUniv");
+        String date = req.getParameter("date");
+        
+        String nbrMoisS = req.getParameter("nbMois");
+        int nbrMois = Integer.parseInt( nbrMoisS);
+        System.out.println("nbrMois en string: "+nbrMoisS);
+        System.out.println("nbrMois en INT: "+nbrMois);
+        
+      
+//        System.out.println("ito ny idP"+ idP);
+      
+        Payer payer = new Payer(idPayer,matricule,anneeUniv, date,nbrMois);
+        
+
+        System.out.println("TY LE idpayer a modifier"+ idPayer );
+        
+        payerDao.updatePayer(payer);
+        resp.sendRedirect("listPayer");
+    }
+
+    private void listPayer(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            List<Payer> listPayer = payerDao.selectAllPayer();
+            System.out.println("Nombre de payment recu: " + listPayer);  // Debugging log
+            req.setAttribute("listPayer", listPayer);
+            RequestDispatcher dispatcher = req.getRequestDispatcher("Payer-list.jsp");
+            dispatcher.forward(req, resp);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
 }
 
 
