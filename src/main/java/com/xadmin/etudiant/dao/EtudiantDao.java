@@ -24,7 +24,7 @@ public class EtudiantDao {
 
     private static final String DELETE_ETUDIANT_SQL = "DELETE FROM etudiant WHERE matricule = ? ;";
     private static final String UPDATE_ETUDIANT_SQL = "UPDATE etudiant set nom= ? , sexe= ?, datenais= ?, institution= ?, niveau=?, mail=?, anneeuniv=? WHERE matricule=?;";
-
+    private static final String SELECT_ETUDIANT_LIKE = "SELECT * FROM etudiant WHERE nom LIKE ? OR institution LIKE ? OR niveau LIKE ?";
     public EtudiantDao() {
     }
 
@@ -101,6 +101,59 @@ public class EtudiantDao {
         return etudiant;
     }
 
+    public List<Etudiant> selectEtudiantLike(String query) {
+//        Etudiant etudiant = null;
+//        try (Connection connection = getConnection();
+//             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ETUDIANT_LIKE);) {
+//            preparedStatement.setString(1, query);
+//            System.out.println(preparedStatement);
+//            ResultSet rs = preparedStatement.executeQuery();
+//            while (rs.next()) {
+//            	int matricule = rs.getInt("matricule");
+//                String name = rs.getString("nom");
+//                String sexe = rs.getString("sexe");
+//                String dateNais = rs.getString("dateNais");
+//                String institution = rs.getString("institution");
+//                String niveau = rs.getString("niveau");
+//                String mail = rs.getString("mail");
+//                String anneUniv = rs.getString("anneeUniv");
+//                etudiant = new Etudiant(matricule, name, sexe, dateNais, institution, niveau, mail, anneUniv);
+//                System.out.println("selected etudiant"+ etudiant);
+//            }
+//        } catch (SQLException e) {
+//            printSQLException(e);
+//        }
+//        return etudiant;
+        
+        List<Etudiant> etudiants = new ArrayList<>();
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ETUDIANT_LIKE);) {
+        	String trueQuery = "%"+query+"%";
+        	preparedStatement.setString(1, trueQuery);
+        	preparedStatement.setString(2, trueQuery);
+        	preparedStatement.setString(3, trueQuery);
+//        	preparedStatement.setString(4, trueQuery);
+            System.out.println("Executing query: " + preparedStatement);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                int matricule = rs.getInt("matricule");
+                String name = rs.getString("nom");
+                String sexe = rs.getString("sexe");
+                String dateNais = rs.getString("dateNais");
+                String institution = rs.getString("institution");
+                String niveau = rs.getString("niveau");
+                String mail = rs.getString("mail");
+                String anneeUniv = rs.getString("anneeUniv");
+                Etudiant etudiant = new Etudiant(matricule, name, sexe, dateNais, institution, niveau, mail, anneeUniv);
+                etudiants.add(etudiant);
+                System.out.println("Etudiant added: " + etudiant);
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        System.out.println("Total etudiants retrieved: " + etudiants.size());
+        return etudiants;
+    }
 
  // select all etudiant
     public List<Etudiant> selectAllEtudiant() {

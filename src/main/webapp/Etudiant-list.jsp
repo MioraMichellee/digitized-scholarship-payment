@@ -12,6 +12,11 @@
 <div class="container">
     <h3 class="text-center">Liste des étudiants</h3>
     <a href="${pageContext.request.contextPath}/new" class="btn btn-success">Ajouter étudiants</a>
+    <form action="searchEtudiant" method="get">
+    <input type="text" name="query" placeholder="Rechercher un étudiant">
+    <input type="submit" value="Rechercher">
+</form>
+    
     <table class="table table-bordered">
         <thead>
             <tr>
