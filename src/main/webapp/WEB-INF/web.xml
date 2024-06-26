@@ -24,4 +24,14 @@
     <servlet-name>MontantSERVLET</servlet-name>
     <url-pattern>/MontantSERVLET</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>generatePDF</display-name>
+    <servlet-name>generatePDF</servlet-name>
+    <servlet-class>com.xadmin.generatePDF.web.generatePDF</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>generatePDF</servlet-name>
+    <url-pattern>/generatePDF</url-pattern>
+  </servlet-mapping>
 </web-app>

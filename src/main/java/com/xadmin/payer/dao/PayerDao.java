@@ -18,13 +18,13 @@ public class PayerDao {
     private String jdbcPassword = "mdp";
 //    private String jdbcDriver = "com.mysql.cj.jdbc.Driver";
 
-    private static final String INSERT_PAYER_SQL = "INSERT INTO payer " + "(matricule, anneeUniv, date, nbrMois) VALUES" + "(?,?,?,?);";
+    private static final String INSERT_PAYER_SQL = "INSERT INTO payer " + "(matricule, anneeUniv, date, nbrMois,tranche) VALUES" + "(?,?,?,?,?);";
     private static final String SELECT_PAYER_BY_ID = "SELECT* FROM payer where idPayer = ?;";
  
     private static final String SELECT_ALL_PAYER = "SELECT * FROM payer;";
 
     private static final String DELETE_PAYER_SQL = "DELETE FROM payer WHERE idPayer = ? ;";
-    private static final String UPDATE_PAYER_SQL = "UPDATE payer set matricule= ? , anneeUniv= ?, date= ?, nbrMois= ? WHERE idPayer=?;";
+    private static final String UPDATE_PAYER_SQL = "UPDATE payer set matricule= ? , anneeUniv= ?, date= ?, nbrMois= ?,tranche=? WHERE idPayer=?;";
 
     public PayerDao() {
     }
@@ -52,6 +52,7 @@ public class PayerDao {
             preparedStatement.setString(2, payer.getAnneeUniv());
             preparedStatement.setString(3, payer.getDate());
             preparedStatement.setInt(4, payer.getNbMois());
+            preparedStatement.setString(5, payer.getTranche());
        
             System.out.println(preparedStatement);
             preparedStatement.executeUpdate();
@@ -87,8 +88,9 @@ public class PayerDao {
                 String anneeUniv = rs.getString("anneeUNiv");
                 String date = rs.getString("date");
                 int nbMois = rs.getInt("nbrMois");
+                String tranche = rs.getString("tranche");
               
-                payer = new Payer(idPayer,matricule, anneeUniv, date, nbMois);
+                payer = new Payer(idPayer,matricule, anneeUniv, date, nbMois,tranche);
                 System.out.println("selected payement"+ payer);
             }
         } catch (SQLException e) {
@@ -111,7 +113,8 @@ public class PayerDao {
                 String anneeUniv = rs.getString("anneeUNiv");
                 String date = rs.getString("date");
                 int nbMois = rs.getInt("nbrMois");
-                Payer payer = new Payer(idPayer, matricule,  anneeUniv, date, nbMois);
+                String tranche = rs.getString("tranche");
+                Payer payer = new Payer(idPayer, matricule,  anneeUniv, date, nbMois, tranche);
                 payers.add(payer);
                 System.out.println("Etudiant added: " + payer);
             }
@@ -132,8 +135,9 @@ public class PayerDao {
             preparedStatement.setString(2, payer.getAnneeUniv());
             preparedStatement.setString(3, payer.getDate());
             preparedStatement.setInt(4, payer.getNbMois());
-          
-            preparedStatement.setInt(5, payer.getIdPaye());
+            preparedStatement.setString(5,payer.getTranche());
+            
+            preparedStatement.setInt(6, payer.getIdPaye());
 
             rowUpdated = preparedStatement.executeUpdate() > 0;
 

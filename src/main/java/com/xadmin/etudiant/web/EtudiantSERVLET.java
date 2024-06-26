@@ -1,9 +1,31 @@
 
 package com.xadmin.etudiant.web;
 
-import com.xadmin.montant.bean.Montant;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+//import javax.swing.text.Document;
+
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import com.itextpdf.text.Document;
+
+
 import com.xadmin.equipement.bean.Equipement;
 import com.xadmin.equipement.dao.EquipementDao;
+import com.xadmin.etudiant.bean.Etudiant;
+import com.xadmin.etudiant.dao.EtudiantDao;
+import com.xadmin.montant.bean.Montant;
 import com.xadmin.montant.dao.MontantDao;
 import com.xadmin.payer.bean.Payer;
 //
@@ -54,25 +76,14 @@ import com.xadmin.payer.bean.Payer;
 //
 //}
 import com.xadmin.payer.dao.PayerDao;
-import com.xadmin.etudiant.bean.Etudiant;
-
-import com.xadmin.etudiant.dao.EtudiantDao;
-import com.xadmin.montant.bean.Montant;
 
 import jakarta.servlet.RequestDispatcher;
-import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 //import jdk.internal.org.objectweb.asm.tree.TryCatchBlockNode;
-
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.SQLException;
-import java.util.List;
-
 @WebServlet("/")
 public class EtudiantSERVLET extends HttpServlet {
     private EtudiantDao etudiantDao;
@@ -184,6 +195,8 @@ public class EtudiantSERVLET extends HttpServlet {
                 listPayer(req, resp);
                            
                 break;
+            case "/payerServlet":
+            	generatePdf(req, resp);
         }
     }
     public void showNewForm(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException{
@@ -383,8 +396,9 @@ public class EtudiantSERVLET extends HttpServlet {
         String date = req.getParameter("date");
         String  anneeUniv = req.getParameter("anneeUniv");
         int nbMois = Integer.parseInt(req.getParameter("nbMois"));
+        String tranche = req.getParameter("tranche");
         
-        Payer newPayer = new Payer(matricule,anneeUniv,date,nbMois);
+        Payer newPayer = new Payer(matricule,anneeUniv,date,nbMois,tranche);
 
         payerDao.insertPayer(newPayer);
         resp.sendRedirect("listPayer");
@@ -437,10 +451,11 @@ public class EtudiantSERVLET extends HttpServlet {
         System.out.println("nbrMois en string: "+nbrMoisS);
         System.out.println("nbrMois en INT: "+nbrMois);
         
+        String tranche = req.getParameter("tranche");
       
 //        System.out.println("ito ny idP"+ idP);
       
-        Payer payer = new Payer(idPayer,matricule,anneeUniv, date,nbrMois);
+        Payer payer = new Payer(idPayer,matricule,anneeUniv, date,nbrMois,tranche);
         
 
         System.out.println("TY LE idpayer a modifier"+ idPayer );
@@ -460,6 +475,137 @@ public class EtudiantSERVLET extends HttpServlet {
             e.printStackTrace();
         }
     }
+    
+    private void generatePdf(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        int idPayer = Integer.parseInt(request.getParameter("idPayer"));
+        Payer payer = payerDao.selectPayer(idPayer);
+        int matricule = payer.getMatricule();
+        Etudiant etudiant = etudiantDao.selectEtudiant(matricule);
+        String niveau = etudiant.getNiveau();
+        System.out.println(niveau);
+        Montant montant = montantDao.selectMontantByNiveau(niveau);
+        Equipement equipement = equipementDao.selectEquipement(1);
+        String tranche = payer.getTranche();
+        int montantEq = equipement.getMontantEq();
+        
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=receipt.pdf");
+
+        try {
+//            OutputStream out = response.getOutputStream();
+//            Document document = new Document();
+//            PdfWriter.getInstance(document, out);
+//            document.open();
+//            document.add(new Paragraph("Receipt for Payment"));
+//            document.add(new Paragraph("Date: " + payer.getDate()));
+////            document.add(new Paragraph("ID Payement: " + payer.getIdPaye()));
+//            document.add(new Paragraph("Matricule: " + payer.getMatricule()));
+//            document.add(new Paragraph(etudiant.getNom()));
+//            document.add(new Paragraph("Nee le: "+ etudiant.getDateNais()));
+//            document.add(new Paragraph("Sexe: "+etudiant.getSexe()));
+//            document.add(new Paragraph("Institution: "+ etudiant.getInstitution()));
+//            document.add(new Paragraph("Niveau: "+ etudiant.getNiveau()));
+//            document.add(new Paragraph("Montant: "+ montant.getMontant()));
+//            
+//            
+//            
+//            document.add(new Paragraph("Nombre de Mois: " + payer.getNbMois()));
+//            document.close();
+        	
+        	 OutputStream out = response.getOutputStream();
+             Document document = new Document();
+             PdfWriter.getInstance(document, out);
+             document.open();
+             
+             // Formatage de la date
+             String dateStr = new SimpleDateFormat("dd MMMM yyyy").format(new Date());
+             document.add(new Paragraph("Aujourd’hui le " + dateStr));
+             
+             document.add(new Paragraph("Matricule : " + etudiant.getMatricule()));
+             document.add(new Paragraph(etudiant.getNom()));
+             document.add(new Paragraph("Née le " + etudiant.getDateNais()));
+             document.add(new Paragraph(etudiant.getSexe()));
+             document.add(new Paragraph("Institution : " + etudiant.getInstitution() + " / Niveau : " + etudiant.getNiveau()));
+             
+             // Ajouter un tableau pour les paiements
+             PdfPTable table = new PdfPTable(2); // 2 colonnes
+             table.setWidthPercentage(100);
+             table.setSpacingBefore(10f);
+             table.setSpacingAfter(10f);
+
+             // Ajouter les en-têtes du tableau
+             Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+             PdfPCell cell1 = new PdfPCell(new Phrase("Mois", boldFont));
+             PdfPCell cell2 = new PdfPCell(new Phrase("Montant", boldFont));
+             cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+             cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+             table.addCell(cell1);
+             table.addCell(cell2);
+
+             int total = 0;
+
+//             for (Payer p : listPayer) {
+//                 table.addCell(p.getDate()); // suppose que la date est le mois de paiement
+//                 table.addCell(String.valueOf(p.getNbMois() * 23000)); // calcul du montant basé sur le nombre de mois
+//                 total += p.getNbMois() * 23000;
+//             }
+             
+             if (tranche.equals("1ere")) {
+            	 table.addCell("Equipement");
+                 table.addCell(String.valueOf(montantEq));
+            	 table.addCell("Janvier");
+            	 table.addCell(String.valueOf(montant.getMontant()));
+            	 table.addCell("Fevrier");
+            	 table.addCell(String.valueOf(montant.getMontant()));
+            	 table.addCell("Mars");
+            	 table.addCell(String.valueOf(montant.getMontant()));
+            	 table.addCell("Avril");
+            	 table.addCell(String.valueOf(montant.getMontant()));
+            	 total = 4* montant.getMontant() + montantEq;
+            	 table.addCell("Total");
+            	 table.addCell(String.valueOf(total));
+            	}
+             else if (tranche.equals("2eme")) {
+            	 table.addCell("Mai");
+            	 table.addCell(String.valueOf(montant.getMontant()));
+            	 table.addCell("Juin");
+            	 table.addCell(String.valueOf(montant.getMontant()));
+            	 table.addCell("Juillet");
+            	 table.addCell(String.valueOf(montant.getMontant()));
+            	 
+            	 total = 3* montant.getMontant() ;
+            	 table.addCell("Total");
+            	 table.addCell(String.valueOf(total));
+             }
+             else {
+            	 table.addCell("Aout");
+            	 table.addCell(String.valueOf(montant.getMontant()));
+            	 table.addCell("Septembre");
+            	 table.addCell(String.valueOf(montant.getMontant()));
+            	 table.addCell("Octobre");
+            	 table.addCell(String.valueOf(montant.getMontant()));
+            	 
+            	 total = 3* montant.getMontant() ;
+            	 table.addCell("Total");
+            	 table.addCell(String.valueOf(total));
+             }
+             
+//             total += 110000;
+
+             // Ajouter le tableau au document
+             document.add(table);
+
+             // Ajouter le total
+             document.add(new Paragraph("Total: " + total + " Ariary"));
+             document.add(new Paragraph("Total Payé : " + total + " Ariary"));
+
+             document.close();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+    }
+    
     
 }
 

@@ -8,22 +8,35 @@ public class Payer {
 	private String anneeUniv;
 	private String date ;
 	private int nbMois;
+	private String tranche;
 	
 	
-	public Payer(int idPaye, int matricule, String anneeUniv, String date, int nbMois) {
+	public Payer(int idPaye, int matricule, String anneeUniv, String date, int nbMois, String tranche) {
 		this.idPaye = idPaye;
 		this.matricule = matricule;
 		this.anneeUniv = anneeUniv;
 		this.date = date;
 		this.nbMois = nbMois;
+		this.tranche = tranche;
 	}
 
 
-	public Payer(int matricule, String anneeUniv, String date, int nbMois) {
+	public Payer(int matricule, String anneeUniv, String date, int nbMois,String tranche) {
 		this.matricule = matricule;
 		this.anneeUniv = anneeUniv;
 		this.date = date;
 		this.nbMois = nbMois;
+		this.tranche = tranche;
+	}
+
+
+	public String getTranche() {
+		return tranche;
+	}
+
+
+	public void setTranche(String tranche) {
+		this.tranche = tranche;
 	}
 
 

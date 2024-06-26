@@ -22,6 +22,7 @@
                 <th>Annee universitaire </th>
                 <th>Date</th>
                 <th>Nombre de mois</th>
+                <th>Tranche</th>
                 
                 <th>Actions</th>
             </tr>
@@ -39,11 +40,14 @@
                 <td><%= payer.getAnneeUniv() %></td>
                 <td><%= payer.getDate() %></td>
                 <td><%= payer.getNbMois() %></td>
+                <td><%=payer.getTranche() %></td>
                 
                 <td>
                     <a href="${pageContext.request.contextPath}/editPayer?idPayer=<%= payer.getIdPaye() %>">Edit</a>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="${pageContext.request.contextPath}/deletePayer?idPayer=<%= payer.getIdPaye() %>">Delete</a>
+                	&nbsp;&nbsp;&nbsp;&nbsp;
+                	<a href="${pageContext.request.contextPath}/payerServlet?action=generatePdf&idPayer=<%= payer.getIdPaye() %>">Generate PDF</a>
                 </td>
             </tr>
             <%
@@ -51,7 +55,7 @@
                 } else {
             %>
             <tr>
-                <td colspan="9" class="text-center">Aucun étudiant trouvé</td>
+                <td colspan="9" class="text-center">Aucun payment trouvé</td>
             </tr>
             <%
                 }

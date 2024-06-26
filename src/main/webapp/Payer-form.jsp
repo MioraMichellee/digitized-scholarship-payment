@@ -36,9 +36,12 @@
 						<label>Matricule</label>
 						<input type="text" name="matricule" class="form-control" value="<%= isUpdate ? payer.getMatricule() : "" %>" required="required">
 					</fieldset>
+					
 					<fieldset class="form-group">
-						<label>Annee univ</label>
-						<input type="text" name="anneeUniv" class="form-control" value="<%= isUpdate ? payer.getAnneeUniv() : "" %>" required="required">
+						<label>Annee universitaire</label>
+						<select name="anneeUniv" class="form-control" required="required">
+							<option value="2023-2024" <%= isUpdate && "2023-2024".equals(payer.getAnneeUniv()) ? "selected" : "" %>>2023-2024</option>
+						</select>
 					</fieldset>
 					<fieldset class="form-group">
 						<label>Date de Payement</label>
@@ -47,6 +50,14 @@
 					<fieldset class="form-group">
 						<label>Nombre de mois</label>
 						<input type="number" name="nbMois" class="form-control" value="<%= isUpdate ? payer.getNbMois() : "" %>" required="required">
+					</fieldset>
+					<fieldset class="form-group">
+						<label>Tranche</label>
+						<select name="tranche" class="form-control" required="required">
+							<option value="1ere" <%= isUpdate && "1ere".equals(payer.getTranche()) ? "selected" : "" %>>1ere tranche</option>
+							<option value="2eme" <%= isUpdate && "2eme".equals(payer.getTranche()) ? "selected" : "" %>>2eme tranche</option>
+							<option value="3eme" <%= isUpdate && "3eme".equals(payer.getTranche()) ? "selected" : "" %>>3eme tranche</option>
+						</select>
 					</fieldset>
 					<button type="submit" class="btn btn-success">Enregistrer</button>
 				</form>

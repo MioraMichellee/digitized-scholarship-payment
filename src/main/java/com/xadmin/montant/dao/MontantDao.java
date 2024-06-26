@@ -19,6 +19,8 @@ public class MontantDao {
 
     private static final String INSERT_MONTANT_SQL = "INSERT INTO montant " + "(niveau,montant) VALUES" + "(?,?);";
     private static final String SELECT_MONTANT_BY_ID = "SELECT* FROM montant where idNiv = ?;";
+    private static final String SELECT_MONTANT_NIVEAU = "SELECT* FROM montant where niveau = ?;";
+    
  
     private static final String SELECT_ALL_MONTANT = "SELECT * FROM montant;";
 
@@ -92,6 +94,24 @@ public class MontantDao {
         return montant;
     }
 
+    public Montant selectMontantByNiveau(String niveau) {
+    	Montant montant = null;
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_MONTANT_NIVEAU);) {
+            preparedStatement.setString(1, niveau);
+            System.out.println(preparedStatement);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+//                String niveau = rs.getString("niveau");
+                int montantValue = rs.getInt("montant") ;
+                
+                montant = new Montant(niveau, montantValue);
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return montant;
+    }
 
  // select all montant
     public List<Montant> selectAllMontant() {
