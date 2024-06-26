@@ -66,8 +66,10 @@
 						<input type="email" name="mail" class="form-control" value="<%= isUpdate ? etudiant.getMail() : "" %>" required="required">
 					</fieldset>
 					<fieldset class="form-group">
-						<label>Année Universitaire</label>
-						<input type="text" name="anneeUniv" class="form-control" value="<%= isUpdate ? etudiant.getAnneeUniv() : "" %>" required="required">
+						<label>Annee universitaire</label>
+						<select name="anneeUniv" class="form-control" required="required">
+							<option value="2023-2024" <%= isUpdate && "2023-2024".equals(etudiant.getAnneeUniv()) ? "selected" : "" %>>2023-2024</option>
+						</select>
 					</fieldset>
 					<button type="submit" class="btn btn-success">Enregistrer</button>
 				</form>
