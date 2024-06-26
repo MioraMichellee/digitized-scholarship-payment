@@ -197,10 +197,15 @@ public class EtudiantSERVLET extends HttpServlet {
                 break;
             case "/payerServlet":
             	generatePdf(req, resp);
+            	break;
             	
 //            	----------------------------------------------
             case "/searchEtudiant":
             	searchEtudiant(req,resp);
+            	break;
+            case "/listMineur":
+            	listMineur(req,resp);
+            	break;
             
         }
     }
@@ -615,6 +620,14 @@ public class EtudiantSERVLET extends HttpServlet {
     private void searchEtudiant(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String query = req.getParameter("query");
         List<Etudiant> listEtudiant = etudiantDao.selectEtudiantLike(query);
+        req.setAttribute("listEtudiant", listEtudiant);
+        RequestDispatcher dispatcher = req.getRequestDispatcher("Etudiant-list.jsp");
+        dispatcher.forward(req, resp);
+    }
+    
+    private void listMineur(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//        String query = req.getParameter("query");
+        List<Etudiant> listEtudiant = etudiantDao.selectMineur();
         req.setAttribute("listEtudiant", listEtudiant);
         RequestDispatcher dispatcher = req.getRequestDispatcher("Etudiant-list.jsp");
         dispatcher.forward(req, resp);
