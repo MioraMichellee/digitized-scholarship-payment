@@ -22,7 +22,7 @@ public class MontantDao {
     private static final String SELECT_MONTANT_NIVEAU = "SELECT* FROM montant where niveau = ?;";
     
  
-    private static final String SELECT_ALL_MONTANT = "SELECT * FROM montant;";
+    private static final String SELECT_ALL_MONTANT = "SELECT * FROM montant order by niveau asc;";
 
     private static final String DELETE_MONTANT_SQL = "DELETE FROM montant WHERE idNiv = ? ;";
     private static final String UPDATE_MONTANT_SQL = "UPDATE montant set niveau= ? , montant= ? WHERE idNiv=?;";
