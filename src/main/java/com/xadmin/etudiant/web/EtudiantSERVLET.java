@@ -125,6 +125,10 @@ public class EtudiantSERVLET extends HttpServlet {
         System.out.println("Action: " + action);  // Debugging log
         switch (action)
         {
+        
+        	case "/":
+            welcome(req, resp);
+            break;
             case "/new":
                 showNewForm(req, resp);
                 break;
@@ -209,6 +213,12 @@ public class EtudiantSERVLET extends HttpServlet {
             
         }
     }
+    
+    private void welcome (HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+        RequestDispatcher dispatcher = req.getRequestDispatcher("index.jsp");
+
+    }
+    
     public void showNewForm(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException{
         RequestDispatcher dispatcher = req.getRequestDispatcher("Etudiant-form.jsp");
         dispatcher.forward(req, res);
