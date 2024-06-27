@@ -37,7 +37,7 @@
 						<input type="text" name="matricule" class="form-control" value="<%= isUpdate ? payer.getMatricule() : "" %>" required="required">
 					</fieldset>
 					
-					<fieldset class="form-group">
+					<fieldset type= "hidden" class="form-group">
 						<label>Annee universitaire</label>
 						<select name="anneeUniv" class="form-control" required="required">
 							<option value="2023-2024" <%= isUpdate && "2023-2024".equals(payer.getAnneeUniv()) ? "selected" : "" %>>2023-2024</option>
