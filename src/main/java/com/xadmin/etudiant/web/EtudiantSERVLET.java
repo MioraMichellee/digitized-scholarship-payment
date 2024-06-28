@@ -28,6 +28,8 @@ import com.xadmin.etudiant.dao.EtudiantDao;
 import com.xadmin.montant.bean.Montant;
 import com.xadmin.montant.dao.MontantDao;
 import com.xadmin.payer.bean.Payer;
+import com.xadmin.periodePayement.bean.PeriodePayement;
+import com.xadmin.periodePayement.dao.PeriodePayementDao;
 //
 //import jakarta.servlet.ServletConfig;
 //import jakarta.servlet.ServletException;
@@ -90,6 +92,7 @@ public class EtudiantSERVLET extends HttpServlet {
     private MontantDao montantDao;
     private EquipementDao equipementDao;
     private PayerDao payerDao;
+    private PeriodePayementDao periodePayementDao;
 
     @Override
     public void init() throws ServletException{
@@ -97,6 +100,7 @@ public class EtudiantSERVLET extends HttpServlet {
         montantDao = new MontantDao();
         equipementDao = new EquipementDao();
         payerDao = new PayerDao();
+        periodePayementDao = new PeriodePayementDao();
     }
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //        super.doPost(req, resp);
@@ -213,6 +217,13 @@ public class EtudiantSERVLET extends HttpServlet {
             	
             case "/listEtudiantParNE":
                 listEtudiantsParNE(req, resp);
+                break;
+//                --------------------------------------------------
+            case "/editPeriodePayement":
+            	showEditFormPeriodePayememnt(req, resp);
+                break;
+            case "/updatePeriodePayement":
+                updatePeriodePayement(req, resp);
                 break;
             
         }
@@ -491,8 +502,10 @@ public class EtudiantSERVLET extends HttpServlet {
     private void listPayer(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             List<Payer> listPayer = payerDao.selectAllPayer();
+            List<PeriodePayement> listPeriodePayement = periodePayementDao.selectAllPeriodePayement();
             System.out.println("Nombre de payment recu: " + listPayer);  // Debugging log
             req.setAttribute("listPayer", listPayer);
+            req.setAttribute("listPeriodePayement", listPeriodePayement);
             RequestDispatcher dispatcher = req.getRequestDispatcher("Payer-list.jsp");
             dispatcher.forward(req, resp);
         } catch (Exception e) {
@@ -659,6 +672,33 @@ public class EtudiantSERVLET extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+//    ------------------------------------------------------------------------------------
+//    pour periode 
+    public void showEditFormPeriodePayememnt(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+        int idPeriode = Integer.parseInt(req.getParameter("idPeriode"));
+        PeriodePayement existingPeriodePayement;
+        try {
+            existingPeriodePayement = periodePayementDao.selectPeriodePayement(idPeriode);
+            RequestDispatcher dispatcher = req.getRequestDispatcher("PeriodePayement-form.jsp");
+            req.setAttribute("periodePayement", existingPeriodePayement);
+            dispatcher.forward(req, resp);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    
+    public void updatePeriodePayement(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+        int idPeriode = Integer.parseInt(req.getParameter("idPeriode"));
+//        String niveau = req.getParameter("niveau");
+        String tranche = req.getParameter("tranche");
+        String dateDebut = req.getParameter("dateDebut");
+        String dateFin = req.getParameter("dateFin");
+       
+        PeriodePayement periodePayement = new PeriodePayement(idPeriode, tranche, dateDebut, dateFin);
+        System.out.println("TY LE montant UPDATE"+ periodePayement );
+        periodePayementDao.updatePeriodePayement(periodePayement);
+        resp.sendRedirect("listPayer");
     }
   
 }

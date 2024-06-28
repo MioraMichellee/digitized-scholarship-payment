@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
 <%@ page import="com.xadmin.payer.bean.Payer" %>
+<%@ page import="com.xadmin.periodePayement.bean.PeriodePayement" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -61,6 +62,52 @@
                 }
             %>
         </tbody>
+    </table>
+    
+     <h3 class="text-center">Les periodes de payements</h3>
+        <table class="table table-bordered">
+        <thead>
+            <tr>
+              	
+					
+					<th>Tranche</th>
+					<th>Debut payement</th>
+					<th>Fin payement</th>
+         
+            </tr>
+        </thead>
+
+		        <tbody>
+            <%
+                List<PeriodePayement> listPeriodePayement = (List<PeriodePayement>) request.getAttribute("listPeriodePayement");
+                if (listPeriodePayement != null && !listPeriodePayement.isEmpty()) {
+                    for (PeriodePayement periodePayement : listPeriodePayement) {
+            %>
+            <tr>
+
+
+						<td><%= periodePayement.getTranche() %></td>
+						<td><%= periodePayement.getDateDebut() %></td>
+						<td><%= periodePayement.getDateFin() %></td>
+                <td>
+                    <a href="${pageContext.request.contextPath}/editPeriodePayement?idPeriode=<%= periodePayement.getIdPeriode() %>" class="btn btn-primary">Edit</a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+            </tr>
+            <%
+                    }
+                } else {
+            %>
+            <tr>
+                <td colspan="9" class="text-center">Aucun étudiant trouvé</td>
+            </tr>
+            <%
+                }
+            %>
+        </tbody>
+		
+
+
     </table>
 </div>
 </body>
