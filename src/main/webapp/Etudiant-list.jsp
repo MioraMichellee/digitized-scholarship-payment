@@ -18,6 +18,18 @@
     <input type="submit" value="Rechercher">
 </form>
     
+    <form action="listEtudiantParNE" method="get" style="width: 37%;display: flex;margin-left: auto;">
+    <div class="form-group">
+        <label for="niveau">Niveau</label>
+        <input type="text" class="form-control" id="niveau" name="niveau">
+    </div>
+    <div class="form-group">
+        <label for="etablissement">Établissement</label>
+        <input type="text" class="form-control" id="etablissement" name="etablissement">
+    </div>
+    <button type="submit" class="btn btn-primary" style="height: 10%; margin: auto;margin-top: 8%;">Rechercher</button>
+</form>
+    
     <table class="table table-bordered">
         <thead>
             <tr>

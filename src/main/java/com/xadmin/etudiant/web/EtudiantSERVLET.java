@@ -210,6 +210,10 @@ public class EtudiantSERVLET extends HttpServlet {
             case "/listMineur":
             	listMineur(req,resp);
             	break;
+            	
+            case "/listEtudiantParNE":
+                listEtudiantsParNE(req, resp);
+                break;
             
         }
     }
@@ -643,6 +647,19 @@ public class EtudiantSERVLET extends HttpServlet {
         dispatcher.forward(req, resp);
     }
     
+    private void listEtudiantsParNE(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String niveau = req.getParameter("niveau");
+        String etablissement = req.getParameter("etablissement");
+
+        try {
+            List<Etudiant> listEtudiants = etudiantDao.selectEtudiantsByNE(niveau, etablissement);
+            req.setAttribute("listEtudiant", listEtudiants);
+            RequestDispatcher dispatcher = req.getRequestDispatcher("EtudiantParNE-list.jsp");
+            dispatcher.forward(req, resp);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
   
 }
 
