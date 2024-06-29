@@ -21,11 +21,11 @@
     <form action="listEtudiantParNE" method="get" style="width: 37%;display: flex;margin-left: auto;">
     <div class="form-group">
         <label for="niveau">Niveau</label>
-        <input type="text" class="form-control" id="niveau" name="niveau">
+        <input type="text" class="form-control" id="niveau" name="niveau" required>
     </div>
     <div class="form-group">
         <label for="etablissement">Établissement</label>
-        <input type="text" class="form-control" id="etablissement" name="etablissement">
+        <input type="text" class="form-control" id="etablissement" name="etablissement" required>
     </div>
     <button type="submit" class="btn btn-primary" style="height: 10%; margin: auto;margin-top: 8%;">Rechercher</button>
 </form>

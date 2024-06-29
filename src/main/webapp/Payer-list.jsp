@@ -14,6 +14,23 @@
 <div class="container">
     <h3 class="text-center">Liste des bourse payer</h3>
     <a href="${pageContext.request.contextPath}/newPayer" class="btn btn-success">Ajouter payement</a>
+    
+     <form action="listRetardataire" method="get" style="width: 37%;display: flex;margin-left: auto;">
+   
+    <div class="form-group">
+        <label for="tranche">Retardataire pour la tranche:</label>
+		<fieldset class="form-group">
+						
+						<select name="tranche" class="form-control" required="required">
+							<option value="1ere" >1ere tranche</option>
+							<option value="2eme" >2eme tranche</option>
+							<option value="3eme">3eme tranche</option>
+						</select>
+					</fieldset>
+    </div>
+    <button type="submit" class="btn btn-primary" style="height: 10%; margin: auto;margin-top: 8%;">Rechercher</button>
+</form>
+
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -21,7 +38,7 @@
                 <th>ID payement</th>
                 <th>Matricule</th>
                 <th>Annee universitaire </th>
-                <th>Date</th>
+                <th>Date payement</th>
                 <th>Nombre de mois</th>
                 <th>Tranche</th>
                 

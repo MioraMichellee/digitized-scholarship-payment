@@ -225,7 +225,10 @@ public class EtudiantSERVLET extends HttpServlet {
             case "/updatePeriodePayement":
                 updatePeriodePayement(req, resp);
                 break;
-            
+//            ------------------------------------------------------
+            case "/listRetardataire":
+                listRetardataire(req, resp);
+                break;
         }
     }
     
@@ -430,8 +433,14 @@ public class EtudiantSERVLET extends HttpServlet {
         int matricule = Integer.parseInt(req.getParameter("matricule"));
         String date = req.getParameter("date");
         String  anneeUniv = req.getParameter("anneeUniv");
-        int nbMois = Integer.parseInt(req.getParameter("nbMois"));
+        int nbMois = 0;
         String tranche = req.getParameter("tranche");
+        if (tranche.equals("1ere")) {
+        	nbMois = 5;
+        }
+        else {
+        	nbMois = 3;
+        }
         
         Payer newPayer = new Payer(matricule,anneeUniv,date,nbMois,tranche);
 
@@ -481,13 +490,15 @@ public class EtudiantSERVLET extends HttpServlet {
         String anneeUniv = req.getParameter("anneeUniv");
         String date = req.getParameter("date");
         
-        String nbrMoisS = req.getParameter("nbMois");
-        int nbrMois = Integer.parseInt( nbrMoisS);
-        System.out.println("nbrMois en string: "+nbrMoisS);
-        System.out.println("nbrMois en INT: "+nbrMois);
         
         String tranche = req.getParameter("tranche");
-      
+        int nbrMois = 0;
+        if (tranche.equals("1ere")) {
+        	nbrMois = 5;
+        }
+        else {
+        	nbrMois = 3;
+        }
 //        System.out.println("ito ny idP"+ idP);
       
         Payer payer = new Payer(idPayer,matricule,anneeUniv, date,nbrMois,tranche);
@@ -700,7 +711,21 @@ public class EtudiantSERVLET extends HttpServlet {
         periodePayementDao.updatePeriodePayement(periodePayement);
         resp.sendRedirect("listPayer");
     }
-  
+    private void listRetardataire(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+      String tranche = req.getParameter("tranche");
+    	 try {
+             List<Payer> listRetardataire = payerDao.selectRetardataire(tranche);
+             List<PeriodePayement> listPeriodePayement = periodePayementDao.selectAllPeriodePayement();
+             
+             req.setAttribute("listPeriodePayement", listPeriodePayement);
+             System.out.println("Nombre de retardataire recu: " + listRetardataire);  // Debugging log
+             req.setAttribute("listPayer", listRetardataire);
+             RequestDispatcher dispatcher = req.getRequestDispatcher("Payer-list.jsp");
+             dispatcher.forward(req, resp);
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
+  }
 }
 
 

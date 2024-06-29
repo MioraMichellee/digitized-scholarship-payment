@@ -26,7 +26,7 @@ public class EtudiantDao {
     private static final String UPDATE_ETUDIANT_SQL = "UPDATE etudiant set nom= ? , sexe= ?, datenais= ?, institution= ?, niveau=?, mail=?, anneeuniv=? WHERE matricule=?;";
     private static final String SELECT_ETUDIANT_LIKE = "SELECT * FROM etudiant WHERE nom LIKE ? OR institution LIKE ? OR niveau LIKE ?";
     private static final String SELECT_MINEUR = "SELECT * FROM etudiant WHERE YEAR(CURRENT_DATE) - YEAR(dateNais) < 18";
-    private static final String SELECT_ETUDIANT_BY_NIVEAU = "SELECT * FROM etudiant WHERE niveau = ? AND institution = ?";
+    private static final String SELECT_ETUDIANT_BY_NIVEAU = "SELECT * FROM etudiant WHERE niveau = ? AND institution LIKE ?";
     private static final String Select_groupbyINSTIT = "SELECT * FROM etudiant ORDER BY institution ASC, niveau ASC";
     public EtudiantDao() {
     }

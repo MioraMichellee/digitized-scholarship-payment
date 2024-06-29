@@ -47,10 +47,7 @@
 						<label>Date de Payement</label>
 						<input type="date" name="date" class="form-control" value="<%= isUpdate ? payer.getDate() : "" %>" required="required">
 					</fieldset>
-					<fieldset class="form-group">
-						<label>Nombre de mois</label>
-						<input type="number" name="nbMois" class="form-control" value="<%= isUpdate ? payer.getNbMois() : "" %>" required="required">
-					</fieldset>
+
 					<fieldset class="form-group">
 						<label>Tranche</label>
 						<select name="tranche" class="form-control" required="required">
