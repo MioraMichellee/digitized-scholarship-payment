@@ -9,6 +9,21 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Bourse</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link active" href="${pageContext.request.contextPath}/list">Etudiant <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" href="${pageContext.request.contextPath}/listMontant">Montant</a>
+      <a class="nav-item nav-link" href="${pageContext.request.contextPath}/listPayer">Payer</a>
+    </div>
+  </div>
+</nav>
+<br> <br>
+
 <div class="container">
     <h3 class="text-center">Liste des étudiants</h3>
     <a href="${pageContext.request.contextPath}/new" class="btn btn-success">Ajouter étudiants</a>
