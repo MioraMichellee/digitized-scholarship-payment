@@ -45,6 +45,8 @@
     <button type="submit" class="btn btn-primary" style="height: 10%; margin: auto;margin-top: 8%;">Rechercher</button>
 </form>
 
+<a href="notifierRetardataires" class="btn btn-primary">Notifier les retardataires</a>
+
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -92,6 +94,9 @@
             <%
                 }
             %>
+            
+            
+         
         </tbody>
     </table>
     

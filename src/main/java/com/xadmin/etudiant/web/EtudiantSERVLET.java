@@ -20,6 +20,14 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import com.itextpdf.text.Document;
 
+import java.util.Properties;
+import javax.mail.*;
+import javax.mail.internet.*;
+
+import service.NotifierRetardataires;
+import util.EmailSender;
+
+
 
 import com.xadmin.equipement.bean.Equipement;
 import com.xadmin.equipement.dao.EquipementDao;
@@ -228,6 +236,10 @@ public class EtudiantSERVLET extends HttpServlet {
 //            ------------------------------------------------------
             case "/listRetardataire":
                 listRetardataire(req, resp);
+                break;
+//                ------------------------------------------------
+            case "/notifierRetardataires":
+                notifierRetardataires(req, resp);
                 break;
         }
     }
@@ -726,6 +738,14 @@ public class EtudiantSERVLET extends HttpServlet {
              e.printStackTrace();
          }
   }
+    
+    private void notifierRetardataires(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        NotifierRetardataires notifier = new NotifierRetardataires();
+        notifier.notifierRetardataires();
+        response.sendRedirect("Payer-list.jsp"); // rediriger vers une page appropriée
+    }
+
 }
 
 
