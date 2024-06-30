@@ -25,7 +25,7 @@ public class PayerDao {
 
     private static final String DELETE_PAYER_SQL = "DELETE FROM payer WHERE idPayer = ? ;";
     private static final String UPDATE_PAYER_SQL = "UPDATE payer set matricule= ? , anneeUniv= ?, date= ?, nbrMois= ?,tranche=? WHERE idPayer=?;";
-    private static final String SELECT_RETARDATAIRE = "SELECT e.matricule, e.nom, e.sexe, e.institution, e.niveau, e.mail, e.anneeUniv, pp.tranche FROM etudiant e JOIN periodePayement pp LEFT JOIN payer p ON e.matricule = p.matricule      AND e.anneeUniv = p.anneeUniv      AND pp.tranche = p.tranche WHERE (p.date IS NULL OR p.date > pp.dateFin) and pp.tranche=?;";
+    private static final String SELECT_RETARDATAIRE = "SELECT e.matricule, e.mail, e.sexe, e.institution, e.niveau, e.mail, e.anneeUniv, pp.tranche FROM etudiant e JOIN periodePayement pp LEFT JOIN payer p ON e.matricule = p.matricule      AND e.anneeUniv = p.anneeUniv      AND pp.tranche = p.tranche WHERE (p.date IS NULL OR p.date > pp.dateFin) and pp.tranche=?;";
     public PayerDao() {
     }
 
@@ -172,7 +172,7 @@ public class PayerDao {
 //                int idPayer = rs.getInt("idPayer");
                 int matricule = rs.getInt("matricule");
                 String anneeUniv = rs.getString("anneeUNiv");
-                String date = "NON PAYE";
+                String mail = rs.getString("mail");
                 String trancheA = rs.getString("tranche");
                 int nbMois;
                 if (trancheA.equals("1ere")) {
@@ -182,7 +182,7 @@ public class PayerDao {
                      nbMois = 3;
 
                 }
-                Payer payer = new Payer( matricule,  anneeUniv, date, nbMois, trancheA);
+                Payer payer = new Payer( matricule,  anneeUniv, mail, nbMois, trancheA);
                 payers.add(payer);
                 System.out.println("Etudiant added: " + payer);
             }

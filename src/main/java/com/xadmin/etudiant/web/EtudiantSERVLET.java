@@ -731,7 +731,7 @@ public class EtudiantSERVLET extends HttpServlet {
              
              req.setAttribute("listPeriodePayement", listPeriodePayement);
              System.out.println("Nombre de retardataire recu: " + listRetardataire);  // Debugging log
-             req.setAttribute("listPayer", listRetardataire);
+             req.setAttribute("listRetardataire", listRetardataire);
              RequestDispatcher dispatcher = req.getRequestDispatcher("Payer-list.jsp");
              dispatcher.forward(req, resp);
          } catch (Exception e) {
@@ -739,11 +739,12 @@ public class EtudiantSERVLET extends HttpServlet {
          }
   }
     
-    private void notifierRetardataires(HttpServletRequest request, HttpServletResponse response)
+    private void notifierRetardataires(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        String mail = req.getParameter("mail");
         NotifierRetardataires notifier = new NotifierRetardataires();
-        notifier.notifierRetardataires();
-        response.sendRedirect("Payer-list.jsp"); // rediriger vers une page appropriée
+        notifier.notifierRetardataires(mail);
+        resp.sendRedirect("listPayer");
     }
 
 }

@@ -1,12 +1,10 @@
 
-
-
 package util;
 
 import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.*;
-import javax.activation.*;
+
 public class EmailSender {
     private final String username = "mioramichelle25@gmail.com";
     private final String password = "badk tgsy bemp cjlz";
@@ -40,4 +38,5 @@ public class EmailSender {
         }
     }
 }
+
 
