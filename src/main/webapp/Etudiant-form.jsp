@@ -6,13 +6,16 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <title>Gestion des Etudiants</title>
 </head>
 <body>
 	<header>
 		<nav class="navbar navbar-expand-md navbar-dark" style="background-color:blue">
 			<div>
-				<a href="http://www.xadmin.net" class="navbar-brand">Application Bourse</a>
+				<a href="#" class="navbar-brand">Application Bourse</a>
 			</div>
 			<ul class="navbar-nav">
 				<li><a href="<%=request.getContextPath()%>/list" class="nav-link">Etudiant List</a></li>
@@ -51,7 +54,8 @@
 					</fieldset>
 					<fieldset class="form-group">
 						<label>Date de Naissance</label>
-						<input type="date" name="dateNais" class="form-control" value="<%= isUpdate ? etudiant.getDateNais() : "" %>" required="required">
+						<!-- <input type="date" name="dateNais" class="form-control" value="<%= isUpdate ? etudiant.getDateNais() : "" %>" required="required"> -->
+						<input type="text" id="dateNais" name="dateNais" class="form-control datepicker" value="<%= isUpdate ? etudiant.getDateNais() : "" %>" required="required">
 					</fieldset>
 					<fieldset class="form-group">
 						<label>Institution</label>
@@ -59,7 +63,14 @@
 					</fieldset>
 					<fieldset class="form-group">
 						<label>Niveau</label>
-						<input type="text" name="niveau" class="form-control" value="<%= isUpdate ? etudiant.getNiveau() : "" %>" required="required">
+						
+						<select name="niveau" class="form-control" required="required">
+							<option value="L1" <%= isUpdate && "L1".equals(etudiant.getNiveau()) ? "selected" : "" %>>L1</option>
+							<option value="L2" <%= isUpdate && "L2".equals(etudiant.getNiveau()) ? "selected" : "" %>>L2</option>
+							<option value="L3" <%= isUpdate && "L3".equals(etudiant.getNiveau()) ? "selected" : "" %>>L3</option>
+							<option value="M1" <%= isUpdate && "M1".equals(etudiant.getNiveau()) ? "selected" : "" %>>M1</option>
+							<option value="M2" <%= isUpdate && "M2".equals(etudiant.getNiveau()) ? "selected" : "" %>>M2</option>
+						</select>
 					</fieldset>
 					<fieldset class="form-group">
 						<label>Mail</label>
@@ -76,5 +87,12 @@
 			</div>
 		</div>
 	</div>
+	<script>
+        $(function() {
+            $(".datepicker").datepicker({
+                dateFormat: "yy/mm/dd"
+            });
+        });
+    </script>
 </body>
 </html>

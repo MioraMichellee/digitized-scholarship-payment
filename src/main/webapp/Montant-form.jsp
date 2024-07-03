@@ -34,7 +34,16 @@
 					<% } %>
 					<fieldset class="form-group">
 						<label>Niveau</label>
-						<input type="text" name="niveau" class="form-control" value="<%= isUpdate ? montant.getNiveau() : "" %>" required="required">
+					
+						
+						<select name="niveau" class="form-control" required="required">
+							<option value="L1" <%= isUpdate && "L1".equals(montant.getNiveau()) ? "selected" : "" %>>L1</option>
+							<option value="L2" <%= isUpdate && "L2".equals(montant.getNiveau()) ? "selected" : "" %>>L2</option>
+							<option value="L3" <%= isUpdate && "L3".equals(montant.getNiveau()) ? "selected" : "" %>>L3</option>
+							<option value="M1" <%= isUpdate && "M1".equals(montant.getNiveau()) ? "selected" : "" %>>M1</option>
+							<option value="M2" <%= isUpdate && "M2".equals(montant.getNiveau()) ? "selected" : "" %>>M2</option>
+						</select>
+					
 					</fieldset>
 					<fieldset class="form-group">
 						<label>Montant</label>

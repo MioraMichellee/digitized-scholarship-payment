@@ -19,6 +19,11 @@
       <a class="nav-item nav-link active" href="${pageContext.request.contextPath}/list">Etudiant <span class="sr-only">(current)</span></a>
       <a class="nav-item nav-link" href="${pageContext.request.contextPath}/listMontant">Montant</a>
       <a class="nav-item nav-link" href="${pageContext.request.contextPath}/listPayer">Payer</a>
+        <form action="searchEtudiant" method="get" style="padding-left:880PX">
+    <input type="text" name="query" style="height:37px">
+    <input class="btn btn-primary" type="submit" value="Rechercher">
+</form>
+
     </div>
   </div>
 </nav>
@@ -28,10 +33,8 @@
     <h3 class="text-center">Liste des étudiants</h3>
     <a href="${pageContext.request.contextPath}/new" class="btn btn-success">Ajouter étudiants</a>
     <a href="${pageContext.request.contextPath}/listMineur" class="btn btn-success">Liste étudiants mineur</a>
-    <form action="searchEtudiant" method="get">
-    <input type="text" name="query" placeholder="Rechercher un étudiant">
-    <input type="submit" value="Rechercher">
-</form>
+    <a href="${pageContext.request.contextPath}/listGrouper" class="btn btn-success">Liste grouper</a>
+  
     
     <form action="listEtudiantParNE" method="get" style="width: 37%;display: flex;margin-left: auto;">
     <div class="form-group">
@@ -45,8 +48,8 @@
     <button type="submit" class="btn btn-primary" style="height: 10%; margin: auto;margin-top: 8%;">Rechercher</button>
 </form>
     
-    <table class="table table-bordered">
-        <thead>
+    <table class="table table-bordered" style="width: 125%;margin-left: -12%;">
+        <thead style="background-color: #f8f9fa;">
             <tr>
                 <th>Matricule</th>
                 <th>Nom</th>
@@ -75,9 +78,9 @@
                 <td><%= etudiant.getMail() %></td>
                 <td><%= etudiant.getAnneeUniv() %></td>
                 <td>
-                    <a href="${pageContext.request.contextPath}/edit?id=<%= etudiant.getMatricule() %>">Edit</a>
+                    <a class="btn btn-info" href="${pageContext.request.contextPath}/edit?id=<%= etudiant.getMatricule() %>">Edit</a>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="${pageContext.request.contextPath}/delete?id=<%= etudiant.getMatricule() %>">Delete</a>
+                    <a class="btn btn-danger"href="${pageContext.request.contextPath}/delete?id=<%= etudiant.getMatricule() %>">Delete</a>
                 </td>
             </tr>
             <%

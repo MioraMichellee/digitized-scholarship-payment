@@ -27,7 +27,7 @@
 <br> <br>
 <div class="container">
 
-    <a href="${pageContext.request.contextPath}/newPayer" class="btn btn-success">Ajouter payement</a>
+  
     
      <form action="listRetardataire" method="get" style="width: 37%;display: flex;margin-left: auto;">
    
@@ -45,16 +45,17 @@
     <button type="submit" class="btn btn-primary" style="height: 10%; margin: auto;margin-top: 8%;">Rechercher</button>
 </form>
 
-<a href="notifierRetardataires" class="btn btn-primary">Notifier les retardataires</a>
 
+<a href="${pageContext.request.contextPath}/newPayer" class="btn btn-success">Ajouter payement</a>
 
       <%
         List<Payer> listPayer = (List<Payer>) request.getAttribute("listPayer");
         if (listPayer != null && !listPayer.isEmpty()) {
     %>
-    <h4 class="text-center mt-4">Liste des payers</h4>
+      
+    <h3 class="text-center mt-4">Liste des payers</h3>
     <table class="table table-bordered">
-        <thead>
+        <thead style="background-color: #f8f9fa;">
            <tr>
            
                 <th>ID payement</th>
@@ -80,11 +81,11 @@
                 <td><%=payer.getTranche() %></td>
                 
                 <td>
-                    <a href="${pageContext.request.contextPath}/editPayer?idPayer=<%= payer.getIdPaye() %>">Edit</a>
+                    <a class="btn btn-info"href="${pageContext.request.contextPath}/editPayer?idPayer=<%= payer.getIdPaye() %>">Edit</a>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="${pageContext.request.contextPath}/deletePayer?idPayer=<%= payer.getIdPaye() %>">Delete</a>
+                    <a  class="btn btn-danger" href="${pageContext.request.contextPath}/deletePayer?idPayer=<%= payer.getIdPaye() %>">Delete</a>
                 	&nbsp;&nbsp;&nbsp;&nbsp;
-                	<a href="${pageContext.request.contextPath}/payerServlet?action=generatePdf&idPayer=<%= payer.getIdPaye() %>">Generer PDF</a>
+                	<a class="btn btn-secondary" href="${pageContext.request.contextPath}/payerServlet?action=generatePdf&idPayer=<%= payer.getIdPaye() %>">Generer PDF</a>
                 </td>
             </tr>
             <%
@@ -100,12 +101,12 @@
         List<Payer> listRetardataire = (List<Payer>) request.getAttribute("listRetardataire");
         if (listRetardataire != null && !listRetardataire.isEmpty()) {
     %>
-    <h4 class="text-center mt-4">Liste des retardataires</h4>
+    <h3 class="text-center mt-4">Liste des retardataires</h3>
     <table class="table table-bordered">
-        <thead>
+        <thead style="background-color: #f8f9fa;">
            <tr>
            
-                <th>ID retardataire</th>
+               
                 <th>Matricule</th>
                 <th>Annee universitaire </th>
                 
@@ -120,7 +121,7 @@
                 for (Payer payer : listRetardataire) {
             %>
             <tr>
-                  <td><%= payer.getIdPaye() %></td>
+                 
                 <td><%= payer.getMatricule() %></td>
                 <td><%= payer.getAnneeUniv() %></td>
                 
@@ -128,11 +129,7 @@
                 <td><%=payer.getTranche() %></td>
                 
                 <td>
-                    <a href="${pageContext.request.contextPath}/editPayer?idPayer=<%= payer.getIdPaye() %>">Edit</a>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="${pageContext.request.contextPath}/deletePayer?idPayer=<%= payer.getIdPaye() %>">Delete</a>
-                	&nbsp;&nbsp;&nbsp;&nbsp;
-                	<a href="${pageContext.request.contextPath}/notifierRetardataires?mail=<%= payer.getDate() %>">Notifier</a>
+                	<a class="btn btn-secondary"href="${pageContext.request.contextPath}/notifierRetardataires?mail=<%= payer.getDate() %>">Notifier</a>
                 </td>
             </tr>
             <%
@@ -144,10 +141,11 @@
         }
     %>
     
+    <br><br><br><br><br><br>
     
      <h3 class="text-center">Les periodes de payements</h3>
         <table class="table table-bordered">
-        <thead>
+        <thead style="background-color: #f8f9fa;">
             <tr>
               	
 					

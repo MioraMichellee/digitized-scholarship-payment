@@ -23,10 +23,12 @@ public class EtudiantDao {
     private static final String SELECT_ALL_ETUDIANT = "SELECT * FROM etudiant;";
 
     private static final String DELETE_ETUDIANT_SQL = "DELETE FROM etudiant WHERE matricule = ? ;";
+    private static final String DELETE_PAYER_SQL = "DELETE FROM payer WHERE matricule =?";
+    
     private static final String UPDATE_ETUDIANT_SQL = "UPDATE etudiant set nom= ? , sexe= ?, datenais= ?, institution= ?, niveau=?, mail=?, anneeuniv=? WHERE matricule=?;";
     private static final String SELECT_ETUDIANT_LIKE = "SELECT * FROM etudiant WHERE nom LIKE ? OR institution LIKE ? OR niveau LIKE ?";
     private static final String SELECT_MINEUR = "SELECT * FROM etudiant WHERE YEAR(CURRENT_DATE) - YEAR(dateNais) < 18";
-    private static final String SELECT_ETUDIANT_BY_NIVEAU = "SELECT * FROM etudiant WHERE niveau = ? AND institution LIKE ?";
+    private static final String SELECT_ETUDIANT_BY_NIVEAU = "SELECT * FROM etudiant WHERE niveau LIKE ? AND institution LIKE ?";
     private static final String Select_groupbyINSTIT = "SELECT * FROM etudiant ORDER BY institution ASC, niveau ASC";
     public EtudiantDao() {
     }
@@ -173,8 +175,10 @@ public class EtudiantDao {
 
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ETUDIANT_BY_NIVEAU)) {
-            preparedStatement.setString(1, niveau);
-            preparedStatement.setString(2, etablissement);
+        	String niveauLike = "%"+niveau+"%";
+        	String etablissementLike = "%"+etablissement+"%";
+        	preparedStatement.setString(1, niveauLike);
+            preparedStatement.setString(2, etablissementLike);
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
@@ -249,9 +253,13 @@ public class EtudiantDao {
     public boolean deleteEtudiant (int matricule) throws SQLException{
         boolean rowDeleted = false;
         try (Connection connection = getConnection();
-        PreparedStatement statement = connection.prepareStatement(DELETE_ETUDIANT_SQL);){
+        PreparedStatement statement = connection.prepareStatement(DELETE_ETUDIANT_SQL);
+        PreparedStatement statement2 = connection.prepareStatement(DELETE_PAYER_SQL);){
             statement.setInt(1,matricule);
             rowDeleted = statement.executeUpdate() >0;
+            
+            statement2.setInt(1, matricule);
+            statement2.executeUpdate();
         }
         return rowDeleted;
     }
@@ -281,5 +289,32 @@ public class EtudiantDao {
         System.out.println("Total etudiants retrieved: " + etudiants.size());
         return etudiants;
     }
+    
+    public List<Etudiant> selectGrouper() {
+        List<Etudiant> etudiants = new ArrayList<>();
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(Select_groupbyINSTIT);) {
+            System.out.println("Executing query: " + preparedStatement);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                int matricule = rs.getInt("matricule");
+                String name = rs.getString("nom");
+                String sexe = rs.getString("sexe");
+                String dateNais = rs.getString("dateNais");
+                String institution = rs.getString("institution");
+                String niveau = rs.getString("niveau");
+                String mail = rs.getString("mail");
+                String anneeUniv = rs.getString("anneeUniv");
+                Etudiant etudiant = new Etudiant(matricule, name, sexe, dateNais, institution, niveau, mail, anneeUniv);
+                etudiants.add(etudiant);
+                System.out.println("Etudiant added: " + etudiant);
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        System.out.println("Total etudiants retrieved: " + etudiants.size());
+        return etudiants;
+    }
+
 
 }

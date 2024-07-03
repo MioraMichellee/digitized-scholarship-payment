@@ -222,6 +222,9 @@ public class EtudiantSERVLET extends HttpServlet {
             case "/listMineur":
             	listMineur(req,resp);
             	break;
+            case "/listGrouper":
+            	listGrouper(req,resp);
+            	break;
             	
             case "/listEtudiantParNE":
                 listEtudiantsParNE(req, resp);
@@ -682,7 +685,13 @@ public class EtudiantSERVLET extends HttpServlet {
         RequestDispatcher dispatcher = req.getRequestDispatcher("Etudiant-list.jsp");
         dispatcher.forward(req, resp);
     }
-    
+    private void listGrouper(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//      String query = req.getParameter("query");
+      List<Etudiant> listEtudiant = etudiantDao.selectGrouper();
+      req.setAttribute("listEtudiant", listEtudiant);
+      RequestDispatcher dispatcher = req.getRequestDispatcher("Etudiant-list.jsp");
+      dispatcher.forward(req, resp);
+  }
     private void listEtudiantsParNE(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String niveau = req.getParameter("niveau");
         String etablissement = req.getParameter("etablissement");

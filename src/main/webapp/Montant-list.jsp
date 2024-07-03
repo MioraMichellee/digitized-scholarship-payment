@@ -29,7 +29,7 @@
     <h3 class="text-center">Liste des Montants</h3>
     <a href="${pageContext.request.contextPath}/newMontant" class="btn btn-success">Ajouter montants</a>
     <table class="table table-bordered">
-        <thead>
+        <thead style="background-color: #f8f9fa;">
             <tr>
               	<th>ID</th>
 					<th>Niveau</th>
@@ -50,9 +50,9 @@
 						<td><%= montant.getNiveau() %></td>
 						<td><%= montant.getMontant() %></td>
                 <td>
-                    <a href="${pageContext.request.contextPath}/editMontant?idNiv=<%= montant.getIdNiv() %>">Edit</a>
+                    <a class="btn btn-info" href="${pageContext.request.contextPath}/editMontant?idNiv=<%= montant.getIdNiv() %>">Edit</a>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <a href="${pageContext.request.contextPath}/deleteM?idNiv=<%= montant.getIdNiv() %>">Delete</a>
+                    <a class="btn btn-danger" href="${pageContext.request.contextPath}/deleteM?idNiv=<%= montant.getIdNiv() %>">Delete</a>
                 </td>
             </tr>
             <%
@@ -69,7 +69,7 @@
     </table>
     <h3 class="text-center">Equipement</h3>
         <table class="table table-bordered">
-        <thead>
+        <thead style="background-color: #f8f9fa;">
             <tr>
               	
 					

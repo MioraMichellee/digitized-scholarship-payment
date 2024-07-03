@@ -11,35 +11,6 @@
 </head>
 <body>
 
- <div class="service-info ">
-                <div class="service-info-cellule">
-                <img src=/>
-                <h3 class="service-info-title"> Indoor pool </h3>
-                <p>Relax around our indoor pool equipped with a jacuzzi and sauna.</p>
-                </div >
-
-                <div class="service-info-cellule">
-                <img src=/>
-                <h3 class="srvice-info-service-info-title"> Mobility </h3>
-                <p> We work with partners offering car, quad, motorcycle, and ski rentals.
-</p>
-                </div>
-
-                <div class="service-info-cellule"> 
-                <img src=/>
-                <h3 class="service-info-title"> Wifi </h3>
-                <p>High-speed Wi-Fi available for free throughout the hotel.</p>
-                </div>
-
-                <div class="service-info-cellule">
-                <img src=/>
-                <h3 class="service-info-title"> Wellness  </h3>
-                <p>Discover our sauna, massage services, and wellness area.</p>
-                </div>
-
-                
-            </div>
-           
-HELLO WELCOME PAGE
+ 
 </body>
 </html>

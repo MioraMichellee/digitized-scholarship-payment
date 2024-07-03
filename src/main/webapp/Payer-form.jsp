@@ -6,6 +6,9 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <title>Gestion des Payements</title>
 </head>
 <body>
@@ -45,7 +48,8 @@
 					</fieldset>
 					<fieldset class="form-group">
 						<label>Date de Payement</label>
-						<input type="date" name="date" class="form-control" value="<%= isUpdate ? payer.getDate() : "" %>" required="required">
+					<!-- 	<input type="date" name="date" class="form-control datepicker" value="<%= isUpdate ? payer.getDate() : "" %>" required="required"> -->
+						<input type="text" id="date" name="date" class="form-control datepicker" value="<%= isUpdate ? payer.getDate() : "" %>" required="required">
 					</fieldset>
 
 					<fieldset class="form-group">
@@ -61,6 +65,13 @@
 			</div>
 		</div>
 	</div>
+	<script>
+        $(function() {
+            $(".datepicker").datepicker({
+                dateFormat: "yy/mm/dd"
+            });
+        });
+    </script>
 </body>
 </html>
     

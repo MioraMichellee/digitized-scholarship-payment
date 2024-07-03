@@ -2,11 +2,15 @@
 <%@ page import="com.xadmin.periodePayement.bean.PeriodePayement" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Date" %>
+<%@ page import="java.util.Calendar" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <title>Modifier les périodes de paiement</title>
 </head>
 <body>
@@ -27,11 +31,16 @@
                 <% 
                 PeriodePayement periodePayement = (PeriodePayement) request.getAttribute("periodePayement"); 
 
-                SimpleDateFormat inputFormat = new SimpleDateFormat("MM-dd-yyyy");
+                SimpleDateFormat inputFormat = new SimpleDateFormat("MM-dd-yyyy"); // Ajustez le format si nécessaire
                 SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
 
                 Date dateDebut = inputFormat.parse(periodePayement.getDateDebut());
-                Date dateFin = inputFormat.parse(periodePayement.getDateFin());
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(dateDebut);
+                calendar.add(Calendar.DAY_OF_MONTH, 21); // Ajouter 21 jours (3 semaines)
+
+                Date dateFin = calendar.getTime();
 
                 String formattedDateDebut = outputFormat.format(dateDebut);
                 String formattedDateFin = outputFormat.format(dateFin);
@@ -49,16 +58,29 @@
                     </fieldset>
                     <fieldset class="form-group">
                         <label>Date de début</label>
-                        <input type="date" name="dateDebut" class="form-control" value="<%= formattedDateDebut %>" required="required">
+                        <input type="date" id="dateDebut" name="dateDebut" class="form-control datepicker" value="<%= formattedDateDebut %>" required="required">
                     </fieldset>
-                    <fieldset class="form-group">
-                        <label>Date de fin</label>
-                        <input type="date" name="dateFin" class="form-control" value="<%= formattedDateFin %>" required="required">
-                    </fieldset>
+                    <input type="hidden" id="dateFin" name="dateFin" value="<%= formattedDateFin %>">
                     <button type="submit" class="btn btn-success">Enregistrer</button>
                 </form>
             </div>
         </div>
     </div>
+    
+    <script>
+        document.getElementById('dateDebut').addEventListener('change', function() {
+            var dateDebut = new Date(this.value);
+            var dateFin = new Date(dateDebut);
+            dateFin.setDate(dateFin.getDate() + 21); // Ajouter 21 jours (3 semaines)
+
+            var year = dateFin.getFullYear();
+            var month = ("0" + (dateFin.getMonth() + 1)).slice(-2); // Ajouter 1 car les mois commencent à 0
+            var day = ("0" + dateFin.getDate()).slice(-2);
+
+            var formattedDateFin = year + "-" + month + "-" + day;
+            document.getElementById('dateFin').value = formattedDateFin;
+        });
+    </script>
 </body>
 </html>
+
